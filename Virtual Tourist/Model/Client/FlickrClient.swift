@@ -20,13 +20,18 @@ class FlickrClient{
         static let base = "https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=" + "\(key)"
                 
         case searchImages(lat: Double, lon: Double, page: Int)
-                
+        case loadImage(farmID: String, serverID: String, secret: String, id: Int)
+        
         var stringValue: String{
             switch self {
             case .searchImages(let lat, let lon, let page):
                 return EndPoints.base + "&media=photos&lat=\(lat)"
                 + "&lon=\(lon)" + "&radius=15&per_page=18&page=\(page)" +
                 "&format=json&nojsoncallback=1"
+                
+            case .loadImage(let farmID, let serverID, let secret, let id):
+                return " https://farm\(farmID)" + ".staticflickr.com/\(serverID)/\(id)"
+                    + "_\(secret).jpg"
             }
         }
         var url: URL {
@@ -59,5 +64,25 @@ class FlickrClient{
             }
             task.resume()
     }
+    
+//    class func loadImage(photoData: Photo, image: Image, completion: @escaping (Image, Data?, Error?)->Void){
+//        let request = URLRequest(url: Endpoints.loadImage(
+//            ["Server": photoData.server ,
+//             "ID": photoData.id,
+//             "Secret": photoData.secret]
+//            , photoData.farm).url)
+//
+//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//
+//            guard error == nil, data != nil else{
+//                 completion(image, nil, error)
+//                return
+//            }
+//
+//            completion(image, data, nil)
+//        }
+//
+//        task.resume()
+//    }
     
 }

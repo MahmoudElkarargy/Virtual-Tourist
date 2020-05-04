@@ -19,7 +19,7 @@ class MapViewController: UIViewController {
         //Setting delegets
         mapView.delegate = self
         restoreTheCenterOfTheMap()
-//        FlickrClient.getPhotosSearchResult(lat: 26.8206, lon: 30.8025, page: 1, completionHandler: handleFlickerImagesSearchResponse)
+        FlickrClient.getPhotosSearchResult(lat: 26.8206, lon: 30.8025, page: 1, completionHandler: handleFlickerImagesSearchResponse)
     }
     
     //MARK: Init funcs
