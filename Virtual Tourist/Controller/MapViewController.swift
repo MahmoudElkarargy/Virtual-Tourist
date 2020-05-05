@@ -8,21 +8,51 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class MapViewController: UIViewController {
     //MARK: Outlets and variables.
     @IBOutlet weak var mapView: MKMapView!
-    
+    var dataController: DataController = DataController.shared
+    var fetchedResultsController:NSFetchedResultsController<Pin>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //Setting delegets
         mapView.delegate = self
         restoreTheCenterOfTheMap()
-        FlickrClient.getPhotosSearchResult(lat: 26.8206, lon: 30.8025, page: 1, completionHandler: handleFlickerImagesSearchResponse)
+        setupGestureRecognition()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setupFetchedResultsController()
+        viewPinsOnMap()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        fetchedResultsController = nil
     }
     
     //MARK: Init funcs
+    //fetch data from storge
+    func setupFetchedResultsController() {
+        print("I'm fetching data")
+        //Fetch data from the store.
+        let fetchRequest: NSFetchRequest<Pin> = Pin.fetchRequest()
+        //Adding sort rule.
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        //Init the fetch result controller
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController.delegate = self
+        //Check if fetch data is success.
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+        }
+    }
     //function to get the center of the map for the last time user left it.
     fileprivate func restoreTheCenterOfTheMap() {
         let latitudeSaved = UserDefaults.standard.double(forKey: "latitude")
@@ -30,6 +60,13 @@ class MapViewController: UIViewController {
         let centerMapCoordinate = CLLocationCoordinate2D(latitude: latitudeSaved, longitude: longitudeSaved)
         let region = MKCoordinateRegion(center: centerMapCoordinate, latitudinalMeters: 10000000, longitudinalMeters: 10000000)
         mapView.setRegion(region, animated: true)
+        
+    }
+    //Func to listen to long press on the map
+    func setupGestureRecognition(){
+        let uilgr = UILongPressGestureRecognizer(target: self, action: #selector(self.handleLongPress(_:)))
+        uilgr.minimumPressDuration = 2.0
+        mapView.addGestureRecognizer(uilgr)
     }
     
     //MARK: Handling functions
@@ -38,17 +75,84 @@ class MapViewController: UIViewController {
             print("Error")
             return
         }
+        print("Response: \(response?.photos?.pages)")
+    }
+    //Handling map press and add the pin next.
+    @objc func handleLongPress(_ gestureRecognizer : UIGestureRecognizer){
+        print("did u call?")
+        if gestureRecognizer.state != .began { return }
+        let touchPoint = gestureRecognizer.location(in: mapView)
+        let touchMapCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
+        
+        //Save the pin in the coreData
+        let newPin = Pin(context: dataController.viewContext)
+        newPin.latitude = touchMapCoordinate.latitude
+        newPin.longitude =  touchMapCoordinate.longitude
+        newPin.creationDate = Date()
+        //saving data
+        try? dataController.viewContext.save()
+        
+        //Add the new Pin in the map.
+        let newAnnotation = MKPointAnnotation()
+        newAnnotation.coordinate = CLLocationCoordinate2D(latitude: touchMapCoordinate.latitude, longitude: touchMapCoordinate.longitude)
+        mapView.addAnnotation(newAnnotation)
     }
     
+    //MARK: View functions:
+    func viewPinsOnMap(){
+        var annotations = [MKPointAnnotation]()
+        //fetch data of pins from the storge and loop over them.
+        for pin in fetchedResultsController!.fetchedObjects! {
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
+            annotations.append(annotation)
+        }
+        // add the annotations to the map
+        self.mapView.addAnnotations(annotations)
+        self.mapView.reloadInputViews()
+    }
 }
 
-extension MapViewController: MKMapViewDelegate{
+extension MapViewController: MKMapViewDelegate, NSFetchedResultsControllerDelegate{
+    //Update and save the center of the map, when user travel locations around the world
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        //Update and save the center of the map, when user travel locations around the world
         let center = mapView.centerCoordinate
         UserDefaults.standard.set(Double(center.latitude), forKey: "latitude")
         UserDefaults.standard.set(Double(center.longitude), forKey: "longitude")
     }
     
+    //customize pins
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+       let reuseId = "pin"
+       var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+       if pinView == nil {
+        //Styling of pins
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView?.isEnabled = true
+            pinView!.pinTintColor = .red
+            pinView?.animatesDrop = true
+       }
+       else {
+           pinView!.annotation = annotation
+       }
+       return pinView
+    }
+    // This delegate method is implemented to respond to taps. as to direct to media type
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        let longitude = (view.annotation?.coordinate.longitude)!
+        let latitude = (view.annotation?.coordinate.latitude)!
+        //Get the images ready.
+        FlickrClient.getPhotosSearchResult(lat: latitude, lon: longitude, page: 1, completionHandler: handleFlickerImagesSearchResponse)
+    }
+    
+    
+    
+    //update the data.
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        try? fetchedResultsController.performFetch()
+    }
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        try? fetchedResultsController.performFetch()
+    }
 }
 
