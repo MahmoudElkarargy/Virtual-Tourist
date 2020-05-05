@@ -10,13 +10,14 @@ import UIKit
 import MapKit
 import CoreData
 
+
 class MapViewController: UIViewController {
     //MARK: Outlets and variables.
     @IBOutlet weak var mapView: MKMapView!
     var dataController: DataController = DataController.shared
     var fetchedResultsController:NSFetchedResultsController<Pin>!
     var searchResponse: ImagesSearchResponse?
-    
+    var currentPin: MKAnnotation?
     override func viewDidLoad() {
         super.viewDidLoad()
         //Setting delegets
@@ -37,7 +38,6 @@ class MapViewController: UIViewController {
     //MARK: Init funcs
     //fetch data from storge
     func setupFetchedResultsController() {
-        print("I'm fetching data")
         //Fetch data from the store.
         let fetchRequest: NSFetchRequest<Pin> = Pin.fetchRequest()
         //Adding sort rule.
@@ -76,8 +76,8 @@ class MapViewController: UIViewController {
             print("Error")
             return
         }
+        //Save the response to move it to the media view.
         searchResponse = response!
-        print("Response: \(searchResponse?.photos?.total)")
         //Navigate to the Media view.
         performSegue(withIdentifier: "openMediaSegue", sender: nil)
     }
@@ -130,10 +130,10 @@ extension MapViewController: MKMapViewDelegate, NSFetchedResultsControllerDelega
        let reuseId = "pin"
        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
        if pinView == nil {
-        //Styling of pins
+            //Styling of pins
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView?.isEnabled = true
-            pinView!.pinTintColor = .red
+            pinView!.pinTintColor = .black
             pinView?.animatesDrop = true
        }
        else {
@@ -145,6 +145,8 @@ extension MapViewController: MKMapViewDelegate, NSFetchedResultsControllerDelega
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         let longitude = (view.annotation?.coordinate.longitude)!
         let latitude = (view.annotation?.coordinate.latitude)!
+        print("yarab yb2a zio: \(latitude)")
+        currentPin = view.annotation!
         //Get the images ready.
         FlickrClient.getPhotosSearchResult(lat: latitude, lon: longitude, page: 1, completionHandler: handleFlickerImagesSearchResponse)
     }
@@ -152,7 +154,17 @@ extension MapViewController: MKMapViewDelegate, NSFetchedResultsControllerDelega
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "openMediaSegue"{
             let mediaCollectionView = segue.destination as! MediaCollectionViewController
+            if let pins = fetchedResultsController.fetchedObjects {
+            // there will be only one selected annotation at a time
+            let annotation = mapView.selectedAnnotations[0]
+            // getting the index of the selected annotation to set pin value in destination VC
+            guard let indexPath = pins.firstIndex(where: {
+                (pin) -> Bool in
+                pin.latitude == annotation.coordinate.latitude && pin.longitude == annotation.coordinate.longitude
+            })else{return}
+            mediaCollectionView.selectedPin = pins[indexPath]
             mediaCollectionView.response = searchResponse
+            }
         }
     }
     

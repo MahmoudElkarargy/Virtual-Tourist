@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D638392C2461B2C600E49E1D /* MediaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D638392B2461B2C600E49E1D /* MediaCollectionViewCell.swift */; };
 		D65501F42460DCB5007634F5 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65501F32460DCB5007634F5 /* DataController.swift */; };
 		D65501F72460DCCB007634F5 /* VirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D65501F52460DCCB007634F5 /* VirtualTourist.xcdatamodeld */; };
 		D65501FA2461010F007634F5 /* Pin+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65501F92461010F007634F5 /* Pin+Extensions.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D638392B2461B2C600E49E1D /* MediaCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaCollectionViewCell.swift; sourceTree = "<group>"; };
 		D65501F32460DCB5007634F5 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		D65501F62460DCCB007634F5 /* VirtualTourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VirtualTourist.xcdatamodel; sourceTree = "<group>"; };
 		D65501F92461010F007634F5 /* Pin+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+Extensions.swift"; sourceTree = "<group>"; };
@@ -120,8 +122,8 @@
 		D6F4EE1A246090E700777D08 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				D6F4EE202460A7CA00777D08 /* Response */,
 				D6F4EE1F24609E4400777D08 /* Client */,
+				D6F4EE202460A7CA00777D08 /* Response */,
 				D6F4EE1C24609DA000777D08 /* Data */,
 			);
 			path = Model;
@@ -130,6 +132,7 @@
 		D6F4EE1B246090EF00777D08 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D638392B2461B2C600E49E1D /* MediaCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				D6F4EE222460A7F600777D08 /* ImagesSearchResponse.swift in Sources */,
 				D65502002461246D007634F5 /* MediaCollectionViewController.swift in Sources */,
 				D6F4EE1E24609E1100777D08 /* FlickrClient.swift in Sources */,
+				D638392C2461B2C600E49E1D /* MediaCollectionViewCell.swift in Sources */,
 				D6F4EE0624608FEE00777D08 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

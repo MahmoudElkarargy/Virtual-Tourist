@@ -20,7 +20,7 @@ class FlickrClient{
         static let base = "https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=" + "\(key)"
                 
         case searchImages(lat: Double, lon: Double, page: Int)
-        case loadImage(farmID: String, serverID: String, secret: String, id: Int)
+        case loadImage(id: Int, serverID: String, secret: String, farmID: String)
         
         var stringValue: String{
             switch self {
@@ -30,13 +30,16 @@ class FlickrClient{
                 "&format=json&nojsoncallback=1"
                 
             case .loadImage(let farmID, let serverID, let secret, let id):
-                return " https://farm\(farmID)" + ".staticflickr.com/\(serverID)/\(id)"
+                return "https://farm\(farmID)" + ".staticflickr.com/\(serverID)/\(id)"
                     + "_\(secret).jpg"
             }
         }
         var url: URL {
+            print(stringValue)
             return URL(string: stringValue)!
         }
+        
+        
     }
     
     
@@ -65,24 +68,26 @@ class FlickrClient{
             task.resume()
     }
     
-//    class func loadImage(photoData: Photo, image: Image, completion: @escaping (Image, Data?, Error?)->Void){
-//        let request = URLRequest(url: Endpoints.loadImage(
-//            ["Server": photoData.server ,
-//             "ID": photoData.id,
-//             "Secret": photoData.secret]
-//            , photoData.farm).url)
-//
-//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-//
-//            guard error == nil, data != nil else{
-//                 completion(image, nil, error)
-//                return
-//            }
-//
-//            completion(image, data, nil)
-//        }
-//
-//        task.resume()
-//    }
-    
+    //MARK: Load Images.
+    class func loadImage(photoData: Photo, image: Image, completionHandler: @escaping (Image,Data?, Error?)->Void){
+        
+        print("I will load Img in background")
+        let request = URLRequest(url: EndPoints.loadImage(id: photoData.farm, serverID: photoData.server, secret: photoData.secret, farmID: photoData.id).url)
+        let q = DispatchQueue.global(qos: .userInteractive)
+        q.async {
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            
+                guard error == nil, data != nil else{
+                    DispatchQueue.main.async {
+                        completionHandler(image, nil, error)
+                    }
+                    return
+                }
+                DispatchQueue.main.async {
+                    completionHandler(image, data, nil)
+                }
+            }
+        task.resume()
+        }
+    }
 }

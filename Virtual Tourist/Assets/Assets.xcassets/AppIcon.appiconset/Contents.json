@@ -103,11 +103,6 @@
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "512x512"
-    },
-    {
-      "filename" : "ios-marketing.png",
-      "idiom" : "universal",
-      "scale" : "1x"
     }
   ],
   "info" : {
