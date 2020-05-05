@@ -4,7 +4,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -31,23 +30,23 @@
                     </view>
                     <connections>
                         <outlet property="mapView" destination="kKi-q4-f9h" id="Xz9-Fu-Jco"/>
-                        <segue destination="EcU-rT-93e" kind="showDetail" id="sHX-r9-IHp"/>
+                        <segue destination="EcU-rT-93e" kind="showDetail" identifier="openMediaSegue" id="sHX-r9-IHp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="137.68115942028987" y="112.5"/>
         </scene>
-        <!--View Controller-->
+        <!--Media Collection View Controller-->
         <scene sceneID="3c9-dZ-nsW">
             <objects>
-                <viewController id="EcU-rT-93e" sceneMemberID="viewController">
+                <viewController id="EcU-rT-93e" customClass="MediaCollectionViewController" customModule="Virtual_Tourist" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="bIq-o6-uFR">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="zci-Sp-OnR">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="766"/>
+                                <rect key="frame" x="0.0" y="38" width="414" height="733"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ddc-Tn-Im8">
                                     <size key="itemSize" width="128" height="128"/>
@@ -56,34 +55,49 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="91F-CI-pHU">
-                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="hs3-t2-P8j">
+                                        <rect key="frame" x="0.0" y="0.0" width="136" height="142"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="pHh-Cz-oA1">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="136" height="142"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                        </collectionViewCellContentView>
+                                        </view>
+                                        <size key="customSize" width="136" height="142"/>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qqc-vj-y81">
-                                <rect key="frame" x="118" y="774" width="178" height="46"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                <rect key="frame" x="130.5" y="779" width="153" height="41"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="New collection"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b6x-B2-Oou">
+                                <rect key="frame" x="20" y="0.0" width="45" height="34"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <state key="normal" title="Okay"/>
+                                <connections>
+                                    <action selector="okayButtonPressed:" destination="EcU-rT-93e" eventType="touchUpInside" id="gvb-Ol-j0S"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="b6x-B2-Oou" firstAttribute="leading" secondItem="U28-uI-JT6" secondAttribute="leading" constant="20" id="1dD-od-SUE"/>
                             <constraint firstAttribute="bottom" secondItem="qqc-vj-y81" secondAttribute="bottom" constant="22" id="FtU-55-RXO"/>
                             <constraint firstItem="qqc-vj-y81" firstAttribute="centerX" secondItem="bIq-o6-uFR" secondAttribute="centerX" id="JKY-hk-USb"/>
                             <constraint firstItem="qqc-vj-y81" firstAttribute="top" secondItem="zci-Sp-OnR" secondAttribute="bottom" constant="8" id="TTA-95-vFE"/>
+                            <constraint firstItem="b6x-B2-Oou" firstAttribute="top" secondItem="U28-uI-JT6" secondAttribute="top" id="UwZ-au-Ve9"/>
                             <constraint firstItem="zci-Sp-OnR" firstAttribute="leading" secondItem="U28-uI-JT6" secondAttribute="leading" id="c88-lm-lrg"/>
-                            <constraint firstItem="zci-Sp-OnR" firstAttribute="top" secondItem="U28-uI-JT6" secondAttribute="top" id="dKf-tL-xRs"/>
+                            <constraint firstItem="zci-Sp-OnR" firstAttribute="top" secondItem="U28-uI-JT6" secondAttribute="top" constant="38" id="dKf-tL-xRs"/>
                             <constraint firstItem="qqc-vj-y81" firstAttribute="top" secondItem="zci-Sp-OnR" secondAttribute="bottom" constant="8" id="ezr-bn-OLk"/>
+                            <constraint firstItem="U28-uI-JT6" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="b6x-B2-Oou" secondAttribute="trailing" symbolic="YES" id="ihT-IU-d6p"/>
                             <constraint firstItem="zci-Sp-OnR" firstAttribute="trailing" secondItem="U28-uI-JT6" secondAttribute="trailing" id="mP3-Gi-TDZ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="U28-uI-JT6"/>
                     </view>
+                    <connections>
+                        <outlet property="okayButton" destination="b6x-B2-Oou" id="Q50-hs-9Gg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fEM-4h-Cas" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

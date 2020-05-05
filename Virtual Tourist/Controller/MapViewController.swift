@@ -15,6 +15,7 @@ class MapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     var dataController: DataController = DataController.shared
     var fetchedResultsController:NSFetchedResultsController<Pin>!
+    var searchResponse: ImagesSearchResponse?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,7 +76,10 @@ class MapViewController: UIViewController {
             print("Error")
             return
         }
-        print("Response: \(response?.photos?.pages)")
+        searchResponse = response!
+        print("Response: \(searchResponse?.photos?.total)")
+        //Navigate to the Media view.
+        performSegue(withIdentifier: "openMediaSegue", sender: nil)
     }
     //Handling map press and add the pin next.
     @objc func handleLongPress(_ gestureRecognizer : UIGestureRecognizer){
@@ -145,6 +149,12 @@ extension MapViewController: MKMapViewDelegate, NSFetchedResultsControllerDelega
         FlickrClient.getPhotosSearchResult(lat: latitude, lon: longitude, page: 1, completionHandler: handleFlickerImagesSearchResponse)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "openMediaSegue"{
+            let mediaCollectionView = segue.destination as! MediaCollectionViewController
+            mediaCollectionView.response = searchResponse
+        }
+    }
     
     
     //update the data.
