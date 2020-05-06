@@ -24,12 +24,13 @@ class MediaCollectionViewController: UIViewController {
     var numberOfPages: Int = 1
     var numberOfImagesToBeLoaded: Int = 0
     var deletePerformed: Bool = false
+    
     //MARK: Override functions.
     override func viewDidLoad() {
         super.viewDidLoad()
         if (response?.photos!.pages)! > 1{
-            newCollectionButton.isEnabled = true
-        } else{ newCollectionButton.isEnabled = false }
+            newCollectionButton.isHidden = false
+        } else{ newCollectionButton.isHidden = true }
         collectionView.delegate = self
         collectionView.dataSource = self
         setFlowLayout()
@@ -75,8 +76,8 @@ class MediaCollectionViewController: UIViewController {
             if let numbers = Int((response?.photos!.total)!){
                 //if this location contains photos?
                 if numbers != 0{
-                    print(numbers)
-                    if numbers > 18{
+                    //make sure 1. the max numbers to be loaded is 18 - 2. this is not the last page!
+                    if numbers > 18 {
                         numberOfImagesToBeLoaded = 18
                     }
                     else { numberOfImagesToBeLoaded = numbers }
@@ -93,8 +94,9 @@ class MediaCollectionViewController: UIViewController {
                         FlickrClient.loadImage(photoData: (response?.photos?.photo[img])!, image: image , completionHandler: handleFlickerLoadResponse)
                     }
                 }
-                else{print("WARNING! No images here!")
+                else{
                     self.dismiss(animated: true, completion: nil)
+                    showError(title: "WARNING!", message: "No available images in this location!")
                 }
             }
             return
@@ -107,23 +109,21 @@ class MediaCollectionViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     @IBAction func newCollectionButtonPressed(_ sender: Any) {
-        deletePerformed = true
-        //Delete all excisting imgs, to free space.
-        let numbers = fetchedResultsController.sections![0].numberOfObjects
-        for img in 0...numbers-1{
-            let photo = fetchedResultsController.object(at: [0,img])
-            dataController.viewContext.delete(photo)
-        }
-        //save changes
-        try? dataController.viewContext.save()
-        
         self.numberOfPages = numberOfPages + 1
         //check is there more pages? to be loaded next time?
-        //increment the number of pages by one to avoid deleting imgs if there's no more pages.
         if numberOfPages+1 > (response?.photos!.pages)!{
-            newCollectionButton.isEnabled = false
+            newCollectionButton.isHidden = true
         }
         else {
+            deletePerformed = true
+            //Delete all excisting imgs, to free space.
+            let numbers = fetchedResultsController.sections![0].numberOfObjects
+            for img in 0...numbers-1{
+                let photo = fetchedResultsController.object(at: [0,img])
+                dataController.viewContext.delete(photo)
+            }
+            //save changes
+            try? dataController.viewContext.save()
                 deletePerformed = false
                 FlickrClient.getPhotosSearchResult(lat: selectedPin.latitude, lon: selectedPin.longitude, page: numberOfPages, completionHandler: handleFlickerImagesSearchResponse)
         }
@@ -132,7 +132,7 @@ class MediaCollectionViewController: UIViewController {
     //MARK: handling functions.
     func handleFlickerLoadResponse(image:Image, imgdata: Data?, error: Error?){
         guard error == nil , imgdata != nil else {
-            print("Error")
+            showError(title: "Error!", message: "Can't load data")
             return
         }
         //Update the image after loading it.
@@ -145,7 +145,7 @@ class MediaCollectionViewController: UIViewController {
     }
     func handleFlickerImagesSearchResponse(response: ImagesSearchResponse?, error: Error?){
         guard error == nil , response != nil else {
-            print("Error")
+            showError(title: "Error!", message: "Can't load data")
             return
         }
         //Save the response to move it to the media view.
@@ -172,27 +172,22 @@ extension MediaCollectionViewController: NSFetchedResultsControllerDelegate, UIC
          func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
            //delete photo from memory
             
-    //        print("moshkla 3ndk?")
-    //        print(indexPath)
-    //        print("Index kda: \(indexPath.row)")
-    //        let photo = fetchedResultsController.object(at: indexPath)
-    //        print("ha")
-    //        dataController.viewContext.delete(photo)
-    //        print("deleting")
-    ////        try? dataController.viewContext.save()
-    //        print("mt3'ertsh? \(fetchedResultsController.sections![0].numberOfObjects)")
-    ////        collectionView.deleteItems(at: [indexPath])
-    //        print("bdan dh")
-    //        do{
-    //            try dataController.viewContext.save()
-    //        }catch{
-    //            fatalError(error.localizedDescription)
-    //        }
-    //        print("hina")
-    //        setupFetchedResultsController()
-    //        DispatchQueue.main.async {
-    //            collectionView.reloadData()
-    //        }
+            if fetchedResultsController.sections![0].numberOfObjects > 1{
+                deletePerformed = true
+                let photo = fetchedResultsController.object(at: indexPath)
+                dataController.viewContext.delete(photo)
+                collectionView.deleteItems(at: [indexPath])
+                do{
+                    try dataController.viewContext.save()
+                }catch{
+                    fatalError(error.localizedDescription)
+                }
+                collectionView.reloadData()
+                deletePerformed = false
+            }
+            else{
+                showError(title: "WARNING!", message: "Can't leave the collection empty, Try loading new collection insted!")
+            }
     }
     func setFlowLayout() {
         let space: CGFloat = 2.0

@@ -13,10 +13,11 @@
 		D65501FA2461010F007634F5 /* Pin+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65501F92461010F007634F5 /* Pin+Extensions.swift */; };
 		D65501FC24610125007634F5 /* Image+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65501FB24610125007634F5 /* Image+Extensions.swift */; };
 		D65502002461246D007634F5 /* MediaCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65501FF2461246D007634F5 /* MediaCollectionViewController.swift */; };
+		D683875F246261DF0007D4AB /* ShowAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D683875E246261DF0007D4AB /* ShowAlert.swift */; };
+		D6838761246268EC0007D4AB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6838760246268EC0007D4AB /* Main.storyboard */; };
 		D6F4EE0424608FEE00777D08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F4EE0324608FEE00777D08 /* AppDelegate.swift */; };
 		D6F4EE0624608FEE00777D08 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F4EE0524608FEE00777D08 /* SceneDelegate.swift */; };
 		D6F4EE0824608FEE00777D08 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F4EE0724608FEE00777D08 /* MapViewController.swift */; };
-		D6F4EE0B24608FEE00777D08 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6F4EE0924608FEE00777D08 /* Main.storyboard */; };
 		D6F4EE0D24608FF600777D08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6F4EE0C24608FF600777D08 /* Assets.xcassets */; };
 		D6F4EE1024608FF600777D08 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6F4EE0E24608FF600777D08 /* LaunchScreen.storyboard */; };
 		D6F4EE1E24609E1100777D08 /* FlickrClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F4EE1D24609E1100777D08 /* FlickrClient.swift */; };
@@ -30,11 +31,12 @@
 		D65501F92461010F007634F5 /* Pin+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+Extensions.swift"; sourceTree = "<group>"; };
 		D65501FB24610125007634F5 /* Image+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Extensions.swift"; sourceTree = "<group>"; };
 		D65501FF2461246D007634F5 /* MediaCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaCollectionViewController.swift; sourceTree = "<group>"; };
+		D683875E246261DF0007D4AB /* ShowAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAlert.swift; sourceTree = "<group>"; };
+		D6838760246268EC0007D4AB /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		D6F4EE0024608FEE00777D08 /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6F4EE0324608FEE00777D08 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D6F4EE0524608FEE00777D08 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		D6F4EE0724608FEE00777D08 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		D6F4EE0A24608FEE00777D08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D6F4EE0C24608FF600777D08 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D6F4EE0F24608FF600777D08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D6F4EE1124608FF600777D08 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -96,7 +98,7 @@
 		D6F4EE172460908800777D08 /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
-				D6F4EE0924608FEE00777D08 /* Main.storyboard */,
+				D6838760246268EC0007D4AB /* Main.storyboard */,
 				D6F4EE0E24608FF600777D08 /* LaunchScreen.storyboard */,
 			);
 			path = Storyboard;
@@ -133,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				D638392B2461B2C600E49E1D /* MediaCollectionViewCell.swift */,
+				D683875E246261DF0007D4AB /* ShowAlert.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -221,9 +224,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6838761246268EC0007D4AB /* Main.storyboard in Resources */,
 				D6F4EE1024608FF600777D08 /* LaunchScreen.storyboard in Resources */,
 				D6F4EE0D24608FF600777D08 /* Assets.xcassets in Resources */,
-				D6F4EE0B24608FEE00777D08 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,6 +244,7 @@
 				D65501F42460DCB5007634F5 /* DataController.swift in Sources */,
 				D6F4EE0424608FEE00777D08 /* AppDelegate.swift in Sources */,
 				D6F4EE222460A7F600777D08 /* ImagesSearchResponse.swift in Sources */,
+				D683875F246261DF0007D4AB /* ShowAlert.swift in Sources */,
 				D65502002461246D007634F5 /* MediaCollectionViewController.swift in Sources */,
 				D6F4EE1E24609E1100777D08 /* FlickrClient.swift in Sources */,
 				D638392C2461B2C600E49E1D /* MediaCollectionViewCell.swift in Sources */,
@@ -251,14 +255,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		D6F4EE0924608FEE00777D08 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D6F4EE0A24608FEE00777D08 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		D6F4EE0E24608FF600777D08 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

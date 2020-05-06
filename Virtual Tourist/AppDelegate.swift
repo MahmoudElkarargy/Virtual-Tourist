@@ -14,15 +14,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let dataController = DataController.shared
     
     func checkIfFirstLaunch() {
-        if UserDefaults.standard.bool(forKey: "HasLaunchedBefore") {
-            print("App has launched before")
-        } else {
-            UserDefaults.standard.set(true, forKey: "HasLaunchedBefore")
+        if UserDefaults.standard.bool(forKey: "HasLaunchedBefore") {}
+        else {
             //set a defualt valuse for the map, if it's the app first launch.
             UserDefaults.standard.set(27.644250955246264, forKey: "latitude")
             UserDefaults.standard.set(17.352750691846182, forKey: "longitude")
             UserDefaults.standard.synchronize()
-            
         }
     }
 

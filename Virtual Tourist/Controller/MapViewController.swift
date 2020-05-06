@@ -56,6 +56,12 @@ class MapViewController: UIViewController {
     }
     //function to get the center of the map for the last time user left it.
     fileprivate func restoreTheCenterOfTheMap() {
+        //If it's the user first time to launch, show a welcome msg!
+        if !UserDefaults.standard.bool(forKey: "HasLaunchedBefore"){
+            showError(title: "Welcome!", message: "Start by holding the map to drop pins and explore photos.")
+            UserDefaults.standard.set(true, forKey: "HasLaunchedBefore")
+        }
+        
         let latitudeSaved = UserDefaults.standard.double(forKey: "latitude")
         let longitudeSaved = UserDefaults.standard.double(forKey: "longitude")
         let centerMapCoordinate = CLLocationCoordinate2D(latitude: latitudeSaved, longitude: longitudeSaved)
@@ -73,7 +79,7 @@ class MapViewController: UIViewController {
     //MARK: Handling functions
     func handleFlickerImagesSearchResponse(response: ImagesSearchResponse?, error: Error?){
         guard error == nil , response != nil else {
-            print("Error")
+            showError(title: "Error!", message: "Can't load data")
             return
         }
         //Save the response to move it to the media view.
