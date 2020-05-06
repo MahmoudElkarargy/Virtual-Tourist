@@ -43,7 +43,6 @@ class FlickrClient{
     }
     
     
-    
     //MARK: Search Image Request
     class func getPhotosSearchResult(lat:Double,lon:Double, page: Int ,completionHandler: @escaping (ImagesSearchResponse?, Error?) -> Void){
         
@@ -59,7 +58,7 @@ class FlickrClient{
             do {
                 let decoder = JSONDecoder()
                 let responseObject = try decoder.decode(ImagesSearchResponse.self, from: data)
-                print(String(data: data, encoding: .utf8)!)
+//                print(String(data: data, encoding: .utf8)!)
                 DispatchQueue.main.async {
                         completionHandler(responseObject, nil)
                     }
@@ -76,7 +75,6 @@ class FlickrClient{
     //MARK: Load Images.
     class func loadImage(photoData: Photo, image: Image, completionHandler: @escaping (Image,Data?, Error?)->Void){
         
-        print("I will load Img in background")
         let request = URLRequest(url: EndPoints.loadImage(id: photoData.farm, serverID: photoData.server, secret: photoData.secret, farmID: photoData.id).url)
         let q = DispatchQueue.global(qos: .userInteractive)
         q.async {

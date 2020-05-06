@@ -37,7 +37,7 @@ class MapViewController: UIViewController {
     
     //MARK: Init funcs
     //fetch data from storge
-    func setupFetchedResultsController() {
+    private func setupFetchedResultsController() {
         //Fetch data from the store.
         let fetchRequest: NSFetchRequest<Pin> = Pin.fetchRequest()
         //Adding sort rule.
@@ -170,6 +170,8 @@ extension MapViewController: MKMapViewDelegate, NSFetchedResultsControllerDelega
             mediaCollectionView.response = searchResponse
             }
         }
+        //deselect the tapped pin here so that the next time the can select it.
+        mapView.deselectAnnotation(currentPin , animated: true)
     }    
     //update the data.
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {

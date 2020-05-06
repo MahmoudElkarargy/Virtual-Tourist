@@ -49,7 +49,7 @@ class MediaCollectionViewController: UIViewController {
     
     //MARK: Init funcs
     //fetch data from storge
-    func setupFetchedResultsController() {
+    private func setupFetchedResultsController() {
         //Fetch data from the store.
         let fetchRequest: NSFetchRequest<Image> = Image.fetchRequest()
         //Getting images of right pin

@@ -9,11 +9,6 @@
 import Foundation
 import CoreData
 
-//This class do 3 things:
-//  1. Hold persistent container instance.
-//  2. Load the persisitent store.
-//  3. Access the context.
-
 class DataController {
     
     //singleton instance to Data Controller.
@@ -22,12 +17,12 @@ class DataController {
         persistentContainer = NSPersistentContainer(name: "VirtualTourist")
     }
     
-    // 1. Singleton instance to init the persistent container
+    // Singleton instance to init the persistent container
     let persistentContainer:NSPersistentContainer
     init(modelName:String) {
         persistentContainer = NSPersistentContainer(name: modelName)
     }
-    // 2. Loading the persisitent store.
+    // Loading the persisitent store.
     func load(completion: (() -> Void)? = nil) {
         persistentContainer.loadPersistentStores { storeDescription, error in
             guard error == nil else {
@@ -39,7 +34,7 @@ class DataController {
         }
     }
     
-    // 3. Acessing the context.
+    // Acessing the context.
     var viewContext:NSManagedObjectContext {
         return persistentContainer.viewContext
     }
