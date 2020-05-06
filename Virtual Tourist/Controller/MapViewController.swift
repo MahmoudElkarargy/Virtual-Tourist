@@ -83,7 +83,6 @@ class MapViewController: UIViewController {
     }
     //Handling map press and add the pin next.
     @objc func handleLongPress(_ gestureRecognizer : UIGestureRecognizer){
-        print("did u call?")
         if gestureRecognizer.state != .began { return }
         let touchPoint = gestureRecognizer.location(in: mapView)
         let touchMapCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
@@ -145,7 +144,6 @@ extension MapViewController: MKMapViewDelegate, NSFetchedResultsControllerDelega
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         let longitude = (view.annotation?.coordinate.longitude)!
         let latitude = (view.annotation?.coordinate.latitude)!
-        print("yarab yb2a zio: \(latitude)")
         currentPin = view.annotation!
         //Get the images ready.
         FlickrClient.getPhotosSearchResult(lat: latitude, lon: longitude, page: 1, completionHandler: handleFlickerImagesSearchResponse)
@@ -166,9 +164,7 @@ extension MapViewController: MKMapViewDelegate, NSFetchedResultsControllerDelega
             mediaCollectionView.response = searchResponse
             }
         }
-    }
-    
-    
+    }    
     //update the data.
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         try? fetchedResultsController.performFetch()

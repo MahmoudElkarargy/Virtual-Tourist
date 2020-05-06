@@ -7,6 +7,7 @@
 //
 
 
+
 // MARK: Setting all requests to the Flickr API.
 
 import Foundation
@@ -35,7 +36,6 @@ class FlickrClient{
             }
         }
         var url: URL {
-            print(stringValue)
             return URL(string: stringValue)!
         }
         
@@ -47,9 +47,13 @@ class FlickrClient{
     //MARK: Search Image Request
     class func getPhotosSearchResult(lat:Double,lon:Double, page: Int ,completionHandler: @escaping (ImagesSearchResponse?, Error?) -> Void){
         
+        let q = DispatchQueue.global(qos: .userInteractive)
+        q.async {
         let task = URLSession.shared.dataTask(with: EndPoints.searchImages(lat: lat, lon: lon, page: page).url) { data, response, error in
             guard let data = data else {
+                DispatchQueue.main.async {
                 completionHandler(nil, error)
+                }
                 return
             }
             do {
@@ -66,6 +70,7 @@ class FlickrClient{
                 }
             }
             task.resume()
+        }
     }
     
     //MARK: Load Images.
