@@ -34,7 +34,7 @@ class MapViewController: UIViewController {
         super.viewWillDisappear(animated)
         fetchedResultsController = nil
     }
-    
+
     //MARK: Init funcs
     //fetch data from storge
     private func setupFetchedResultsController() {
@@ -43,7 +43,7 @@ class MapViewController: UIViewController {
         //Adding sort rule.
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
-        
+
         //Init the fetch result controller
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController.delegate = self
@@ -61,13 +61,13 @@ class MapViewController: UIViewController {
             showError(title: "Welcome!", message: "Start by holding the map to drop pins and explore photos.")
             UserDefaults.standard.set(true, forKey: "HasLaunchedBefore")
         }
-        
+
         let latitudeSaved = UserDefaults.standard.double(forKey: "latitude")
         let longitudeSaved = UserDefaults.standard.double(forKey: "longitude")
         let centerMapCoordinate = CLLocationCoordinate2D(latitude: latitudeSaved, longitude: longitudeSaved)
         let region = MKCoordinateRegion(center: centerMapCoordinate, latitudinalMeters: 10000000, longitudinalMeters: 10000000)
         mapView.setRegion(region, animated: true)
-        
+
     }
     //Func to listen to long press on the map
     func setupGestureRecognition(){
@@ -75,7 +75,7 @@ class MapViewController: UIViewController {
         uilgr.minimumPressDuration = 2.0
         mapView.addGestureRecognizer(uilgr)
     }
-    
+
     //MARK: Handling functions
     func handleFlickerImagesSearchResponse(response: ImagesSearchResponse?, error: Error?){
         guard error == nil , response != nil else {
@@ -92,7 +92,7 @@ class MapViewController: UIViewController {
         if gestureRecognizer.state != .began { return }
         let touchPoint = gestureRecognizer.location(in: mapView)
         let touchMapCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
-        
+
         //Save the pin in the coreData
         let newPin = Pin(context: dataController.viewContext)
         newPin.latitude = touchMapCoordinate.latitude
@@ -100,13 +100,13 @@ class MapViewController: UIViewController {
         newPin.creationDate = Date()
         //saving data
         try? dataController.viewContext.save()
-        
+
         //Add the new Pin in the map.
         let newAnnotation = MKPointAnnotation()
         newAnnotation.coordinate = CLLocationCoordinate2D(latitude: touchMapCoordinate.latitude, longitude: touchMapCoordinate.longitude)
         mapView.addAnnotation(newAnnotation)
     }
-    
+
     //MARK: View functions:
     func viewPinsOnMap(){
         var annotations = [MKPointAnnotation]()
@@ -129,7 +129,7 @@ extension MapViewController: MKMapViewDelegate, NSFetchedResultsControllerDelega
         UserDefaults.standard.set(Double(center.latitude), forKey: "latitude")
         UserDefaults.standard.set(Double(center.longitude), forKey: "longitude")
     }
-    
+
     //customize pins
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
        let reuseId = "pin"
@@ -154,7 +154,7 @@ extension MapViewController: MKMapViewDelegate, NSFetchedResultsControllerDelega
         //Get the images ready.
         FlickrClient.getPhotosSearchResult(lat: latitude, lon: longitude, page: 1, completionHandler: handleFlickerImagesSearchResponse)
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "openMediaSegue"{
             let mediaCollectionView = segue.destination as! MediaCollectionViewController
@@ -172,7 +172,7 @@ extension MapViewController: MKMapViewDelegate, NSFetchedResultsControllerDelega
         }
         //deselect the tapped pin here so that the next time the can select it.
         mapView.deselectAnnotation(currentPin , animated: true)
-    }    
+    }
     //update the data.
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         try? fetchedResultsController.performFetch()
